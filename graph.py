@@ -2,22 +2,14 @@
 
 
 ''' 
-    General graph structure 
-
-    This is the simple graph structure that we'll iterate
-
-    node_1 -> node_2 -> ... -> node_n
-    node_2 -> node_x -> ... -> node_y
-    ...
-
-    node_1 = [2, 3]
-    node_2 = [3, 6, 7]
-    node_3 is a leaf
-    node_4 = []
-
+    Toy program to demonstrate how one can find loops in a graph structure
+    using properties of prime numbers.  
 '''
 
 class PrimeList:
+    ''' 
+        Class to generate an array of primes from a text list 
+    '''
 
     def __init__(self):
         # some init stuff
@@ -27,18 +19,24 @@ class PrimeList:
 
     def _build(self):
         f = open('prime_list.txt', 'r')
+
         for line in f:
             self._list.append(int(line))
+        
         f.close()
 
+    # dequeue the list
     def get(self):
         self._index+=1
         return self._list[self._index]
 
 
-# @todo: need a better graph structure
+# @todo: need a better graph structure (with OO nice stuff)
 class PrimeGraph:
-
+    '''
+        Simple graph data structure.  This is simply a list with a 
+        list of nodes that are connected to it.
+    '''
     def __init__(self):
         # build the graph, 
         # @todo: maybe make this random next time
@@ -69,7 +67,8 @@ class GraphTraverser:
     @staticmethod
     def bfs(graph):
         '''
-            BFS
+            BFS traversal
+
             start at the root node, then explore as far as possible
             on each branch before back tracking
         '''
@@ -79,6 +78,8 @@ class GraphTraverser:
     @staticmethod
     def _bfs(graph, node, accum):
         
+        # Check if we have a loop.  This is true whenever the id 
+        # of the node (which is a prime number) divides without remainder
         if accum % graph[node]['id'] == 0:
             print "found duplicate"
             return
@@ -86,7 +87,7 @@ class GraphTraverser:
         # Save prime
         accum *= graph[node]['id']
 
-        # Keep going down the nodes
+        # Keep going down the tree
         if len(graph[node]['n']):
             for n in graph[node]['n']:
                 GraphTraverser._bfs(graph, n, accum)
@@ -95,10 +96,9 @@ class GraphTraverser:
 
 
 if __name__ == "__main__":
-    print "main program"
 
     # Generate prime graph
     p = PrimeGraph()
-    
+
     # Do BFS traversal
     GraphTraverser.bfs(p.nodelist)
