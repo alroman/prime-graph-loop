@@ -32,37 +32,73 @@ class PrimeList:
         f.close()
 
     def get(self):
+        self._index+=1
         return self._list[self._index]
 
 
+# @todo: need a better graph structure
 class PrimeGraph:
 
     def __init__(self):
-        # build the graph, maybe make this random next time
-        self.nodelist = []
-        node_1 = {name: 'node 1', nodes: [2, 3]}
-        node_2 = {name: 'node 2', nodes: [5, 6]}
-        node_3 = {name: 'node 3', nodes: [6, 7, 8]}
-        node_4 = {name: 'node 4', nodes: []}
-        node_5 = {name: 'node 5', nodes: []}
-        node_6 = {name: 'node 6', nodes: []}
-        node_8 = {name: 'node 7', nodes: []}
+        # build the graph, 
+        # @todo: maybe make this random next time
+        self.nodelist = [
+            {'n': [1, 2]},
+            {'n': [3, 4]},
+            {'n': [5, 6, 7]},
+            {'n': [0]},     # loop
+            {'n': []},
+            {'n': []},
+            {'n': []},
+            {'n': []}
+        ]
 
-        prime_list = new PrimeList()
+        self._prime_list = PrimeList()
+        self._build()
 
     def _build(self):
         # build list of nodes
+        for i, node in enumerate(self.nodelist):
+            node['id'] = self._prime_list.get()
+            node['name'] = 'node-' + str(i)
 
+        # print self.nodelist
 
+class GraphTraverser:
 
-def print_graph(root):
+    @staticmethod
+    def bfs(graph):
+        '''
+            BFS
+            start at the root node, then explore as far as possible
+            on each branch before back tracking
+        '''
+        # call recursive method
+        GraphTraverser._bfs(graph, 0, 1)
 
+    @staticmethod
+    def _bfs(graph, node, accum):
+        
+        if accum % graph[node]['id'] == 0:
+            print "found duplicate"
+            return
 
-def next_prime(prime):
-    
+        # Save prime
+        accum *= graph[node]['id']
 
-def print_node():
-    pass
+        # Keep going down the nodes
+        if len(graph[node]['n']):
+            for n in graph[node]['n']:
+                GraphTraverser._bfs(graph, n, accum)
+        else:
+            print "leaf: " + graph[node]['name']
+
 
 if __name__ == "__main__":
-    print "main program"    
+    print "main program"
+
+    # Generate prime graph
+    p = PrimeGraph()
+    
+    # Do BFS traversal
+    GraphTraverser.bfs(p.nodelist)
