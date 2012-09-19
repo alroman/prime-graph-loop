@@ -65,18 +65,18 @@ class PrimeGraph:
 class GraphTraverser:
 
     @staticmethod
-    def bfs(graph):
+    def dfs(graph):
         '''
-            BFS traversal
+            DFS traversal
 
             start at the root node, then explore as far as possible
             on each branch before back tracking
         '''
         # call recursive method
-        GraphTraverser._bfs(graph, 0, 1)
+        GraphTraverser._dfs(graph, 0, 1)
 
     @staticmethod
-    def _bfs(graph, node, accum):
+    def _dfs(graph, node, accum):
         
         # Check if we have a loop.  This is true whenever the id 
         # of the node (which is a prime number) divides without remainder
@@ -90,7 +90,7 @@ class GraphTraverser:
         # Keep going down the tree
         if len(graph[node]['n']):
             for n in graph[node]['n']:
-                GraphTraverser._bfs(graph, n, accum)
+                GraphTraverser._dfs(graph, n, accum)
         else:
             print "leaf: " + graph[node]['name']
 
@@ -101,4 +101,4 @@ if __name__ == "__main__":
     p = PrimeGraph()
 
     # Do BFS traversal
-    GraphTraverser.bfs(p.nodelist)
+    GraphTraverser.dfs(p.nodelist)
